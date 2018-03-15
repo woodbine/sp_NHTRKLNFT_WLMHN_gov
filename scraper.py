@@ -96,7 +96,7 @@ soup = BeautifulSoup(html, 'lxml')
 
 #### SCRAPE DATA
 
-blocks = soup.find('article', 'post-380 page type-page status-publish hentry').find_all('a')
+blocks = soup.find('h2', text="Spend over £25,000").find_next('ul').find_all('a')
 for block in blocks:
     if '.csv' in block['href'] or '.xls' in block['href'] or '.xlsx' in block['href'] or '.pdf' in block['href']:
         if 'http' not in block['href']:
@@ -108,6 +108,9 @@ for block in blocks:
         csvYr = title[-1][-4:]
         if 'l to' in block.text:
             csvMth = 'Q0'
+        if 'November 2012 to January 2017' in block.text:
+            csvMth = 'Q0'
+            csvYr = '2017'
         csvMth = convert_mth_strings(csvMth.upper())
         data.append([csvYr, csvMth, link])
 
